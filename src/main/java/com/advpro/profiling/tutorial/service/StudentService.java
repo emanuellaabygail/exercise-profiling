@@ -24,18 +24,13 @@ public class StudentService {
     private StudentCourseRepository studentCourseRepository;
 
     public List<StudentCourse> getAllStudentsWithCourses() {
-        List<Student> students = studentRepository.findAll();
-        List<StudentCourse> studentCourses = new ArrayList<>();
-        for (Student student : students) {
-            List<StudentCourse> studentCoursesByStudent = studentCourseRepository.findByStudentId(student.getId());
-            for (StudentCourse studentCourseByStudent : studentCoursesByStudent) {
-                StudentCourse studentCourse = new StudentCourse();
-                studentCourse.setStudent(student);
-                studentCourse.setCourse(studentCourseByStudent.getCourse());
-                studentCourses.add(studentCourse);
-            }
+        List<StudentCourse> allStudentCourses = studentCourseRepository.findAll();
+        for (StudentCourse sc : allStudentCourses) {
+            // Make sure lazy loading is handled properly, or fetch eagerly in mapping
+            sc.getStudent().getId(); // Force initialization if needed
+            sc.getCourse().getId();
         }
-        return studentCourses;
+        return allStudentCourses;
     }
 
     public Optional<Student> findStudentWithHighestGpa() {
