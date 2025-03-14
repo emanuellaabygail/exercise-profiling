@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,8 +38,9 @@ public class StudentService {
     public Optional<Student> findStudentWithHighestGpa() {
         return studentRepository.findAll()
                 .stream()
-                .max((s1, s2) -> Double.compare(s1.getGpa(), s2.getGpa()));
+                .max(Comparator.comparingDouble(Student::getGpa));
     }
+
 
     public String joinStudentNames() {
         return studentRepository.findAll()
